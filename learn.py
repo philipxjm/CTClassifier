@@ -1,10 +1,12 @@
 import os
 import pynlpir
 from sklearn.feature_extraction import DictVectorizer
+from sklearn import svm
 vec = DictVectorizer()
 vct=[]
+pynlpir.open()
 
-def readF(path):
+def readF(path, n=0):
     for file in os.listdir(path):
         f=open(path+file,'r')
         s=f.read()
@@ -29,5 +31,7 @@ Eg = temp[0][len3:]
 Cls = [0]*len2+[1]*len1    # 0 for non-edu and 1 for edu
 classify = svm.SVC()
 classify.fit(Eg, Cls)
-
-classify.predict(readF('./Target'))
+targ=vec.fit_transform(vct).toarray()
+print(targ.shape,temp[0].shape,sep='\n\n')
+print(classify.predict(targ[0-len3:]))
+pynlpir.close()
